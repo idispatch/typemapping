@@ -12,6 +12,12 @@ public:
 
     virtual bool getValue(int index, bool * result) = 0;
 
+    virtual bool getValue(int index,          char * result) = 0;
+
+    virtual bool getValue(int index, signed   char * result) = 0;
+
+    virtual bool getValue(int index, unsigned char * result) = 0;
+
     virtual bool getValue(int index, signed   short * result) = 0;
 
     virtual bool getValue(int index, unsigned short * result) = 0;

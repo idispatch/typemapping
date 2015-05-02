@@ -22,6 +22,7 @@ const MappingItem sequence_1[] ={
     {Customer::F_AGE},
     {Customer::F_DATE_JOINED},
     {Customer::F_ACCOUNT_PRIMARY},
+
     {6},
     {Account::F_ACCOUNT_NAME},
     {Account::F_ACCOUNT_ID},
@@ -29,7 +30,9 @@ const MappingItem sequence_1[] ={
     {Account::F_ACCOUNT_AMOUNT},
     {Account::F_ACCOUNT_DATE_OPENED},
     {Account::F_ACCOUNT_ACTIVE},
+
     {Customer::F_ACCOUNT_SECONDARY},
+
     {6},
     {Account::F_ACCOUNT_NAME},
     {Account::F_ACCOUNT_ID},

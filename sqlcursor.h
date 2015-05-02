@@ -32,11 +32,26 @@ public:
 
     bool getType(int index, FieldType::Value * result) {
         *result = FieldType::TYPE_NULL;
-        return false;
+        return true;
     }
 
     bool getValue(int index, bool * result) {
         *result = false;
+        return true;
+    }
+
+    bool getValue(int index,          char * result) {
+        *result = 4;
+        return true;
+    }
+
+    bool getValue(int index, signed   char * result) {
+        *result = 4;
+        return true;
+    }
+
+    bool getValue(int index, unsigned char * result) {
+        *result = 4;
         return true;
     }
 
