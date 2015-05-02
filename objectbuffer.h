@@ -18,6 +18,9 @@ public:
         address->~T();
     }
 
+    T& value() {
+        return *reinterpret_cast<T*>(d_buffer);
+    }
     const T& value() const {
         return *reinterpret_cast<const T*>(d_buffer);
     }

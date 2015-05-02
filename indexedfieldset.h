@@ -10,6 +10,8 @@ class IndexedFieldSet : public IndexedTypeSet {
 public:
     virtual ~IndexedFieldSet();
 
+    virtual bool isNull(int index) = 0;
+
     virtual bool getValue(int index, bool * result) = 0;
 
     virtual bool getValue(int index,          char * result) = 0;

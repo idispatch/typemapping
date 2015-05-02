@@ -35,6 +35,10 @@ public:
         return true;
     }
 
+    virtual bool isNull(int index) {
+        return false;
+    }
+
     bool getValue(int index, bool * result) {
         *result = false;
         return true;

@@ -1,5 +1,5 @@
-#ifndef CURSORREADER_H
-#define CURSORREADER_H
+#ifndef CursorReader_H
+#define CursorReader_H
 
 #include "typetraits.h"
 #include "datetime.h"
@@ -11,7 +11,8 @@ class CursorReader {
     int                     d_index;
     ReadOnlyCursor         *d_cursor;
 public:
-    CursorReader(const MappingSequence &mapping, ReadOnlyCursor *cursor)
+    CursorReader(const MappingSequence &mapping,
+                 ReadOnlyCursor *cursor)
         : d_mapping(mapping),
           d_index(0),
           d_cursor(cursor)
@@ -57,11 +58,30 @@ private:
     template<typename T>
     int handle(T& value, category_choice);
 
-    int handleNull();
+    template<typename T>
+    int handleNull(T& value);
+
+    template<typename T>
+    bool readFromCursor(T *value);
 };
 
-int CursorReader::handleNull() {
-   std::cout << "NULL: " << std::endl;
+
+template<typename T>
+bool CursorReader::readFromCursor(T *value) {
+    return d_cursor->getValue(d_mapping[d_index].columnId(), value);
+}
+
+template<typename T>
+int CursorReader::handleNull(T& value) {
+    int rc;
+    if(d_cursor->isNull(d_mapping[d_index].columnId())) {
+        value.reset();
+        rc = 0;
+    } else {
+        rc = readFromCursor(&value.value());
+    }
+    std::cout << "NULL:" << value << std::endl;
+    return rc;
 }
 
 template<typename T>
@@ -72,9 +92,9 @@ int CursorReader::handle(T& value, category_primitive) {
 template<typename T>
 int CursorReader::handle(T& value, category_nullable) {
     if(value.isNull()) {
-        return operator()(value.value());
+        return handleNull(value);
     } else {
-        return handleNull();
+        return operator()(value.value());
     }
 }
 
@@ -86,14 +106,11 @@ int CursorReader::handle(T& value, category_enumeration) {
 
 template<typename T>
 int CursorReader::handle(T& value, category_sequence) {
-    int count = d_mapping[d_index].d_fieldId;
-    d_index++;
+    int count = d_mapping[d_index++].d_fieldId;
     int result = 0;
     for(int i = 0; result >= 0 && i < count; i++) {
         const MappingItem& m = d_mapping[d_index++];
-        const int fieldId = m.d_fieldId;
-        //d_columnId = m.d_columnId;
-        result = value.manipulate(*this, fieldId);
+        result = value.manipulate(*this, m.fieldId());
     }
     return result;
 }
@@ -110,118 +127,103 @@ int CursorReader::handle(T& value, category_unknown) {
     return -1;
 }
 
+template<typename T>
+int CursorReader::operator()(T& value) {
+    return handle(value, typename category<T>::Value());
+}
+
 int CursorReader::operator()(bool value) {
-    int column = d_mapping[d_index].d_fieldId;
-    bool rc = d_cursor->getValue(column, &value);
+    bool rc = readFromCursor(&value);
     std::cout << "bool:" << value << std::endl;
     return rc ? 0 : -1;
 }
 
 int CursorReader::operator()(char value) {
-    int column = d_mapping[d_index].d_fieldId;
-    bool rc = d_cursor->getValue(column, &value);
+    bool rc = readFromCursor(&value);
     std::cout << "char:" << value << std::endl;
     return rc ? 0 : -1;
 }
 
 int CursorReader::operator()(signed char value) {
-    int column = d_mapping[d_index].d_fieldId;
-    bool rc = d_cursor->getValue(column, &value);
+    bool rc = readFromCursor(&value);
     std::cout << "signed char:" << value << std::endl;
     return rc ? 0 : -1;
 }
 
 int CursorReader::operator()(unsigned char value) {
-    int column = d_mapping[d_index].d_fieldId;
-    bool rc = d_cursor->getValue(column, &value);
+    bool rc = readFromCursor(&value);
     std::cout << "unsigned char:" << value << std::endl;
     return rc ? 0 : -1;
 }
 
 int CursorReader::operator()(signed short value) {
-    int column = d_mapping[d_index].d_fieldId;
-    bool rc = d_cursor->getValue(column, &value);
+    bool rc = readFromCursor(&value);
     std::cout << "signed short:" << value << std::endl;
     return rc ? 0 : -1;
 }
 
 int CursorReader::operator()(unsigned short value) {
-    int column = d_mapping[d_index].d_fieldId;
-    bool rc = d_cursor->getValue(column, &value);
+    bool rc = readFromCursor(&value);
     std::cout << "unsigned short:" << value << std::endl;
     return rc ? 0 : -1;
 }
 
 int CursorReader::operator()(signed int value) {
-    int column = d_mapping[d_index].d_fieldId;
-    bool rc = d_cursor->getValue(column, &value);
+    bool rc = readFromCursor(&value);
     std::cout << "signed int:" << value << std::endl;
     return rc ? 0 : -1;
 }
 
 int CursorReader::operator()(unsigned int value) {
-    int column = d_mapping[d_index].d_fieldId;
-    bool rc = d_cursor->getValue(column, &value);
+    bool rc = readFromCursor(&value);
     std::cout << "unsigned int:" << value << std::endl;
     return rc ? 0 : -1;
 }
 
 int CursorReader::operator()(signed long long value) {
-    int column = d_mapping[d_index].d_fieldId;
-    bool rc = d_cursor->getValue(column, &value);
+    bool rc = readFromCursor(&value);
     std::cout << "signed long long:" << value << std::endl;
     return rc ? 0 : -1;
 }
 
 int CursorReader::operator()(unsigned long long value) {
-    int column = d_mapping[d_index].d_fieldId;
-    bool rc = d_cursor->getValue(column, &value);
+    bool rc = readFromCursor(&value);
     std::cout << "unsigned long long:" << value << std::endl;
     return rc ? 0 : -1;
 }
 
 int CursorReader::operator()(float value) {
-    int column = d_mapping[d_index].d_fieldId;
-    bool rc = d_cursor->getValue(column, &value);
+    bool rc = readFromCursor(&value);
     std::cout << "float: " << value << std::endl;
     return rc ? 0 : -1;
 }
 
 int CursorReader::operator()(double value) {
-    int column = d_mapping[d_index].d_fieldId;
-    bool rc = d_cursor->getValue(column, &value);
+    bool rc = readFromCursor(&value);
     std::cout << "double: " << value << std::endl;
     return rc ? 0 : -1;
 }
 
 template<>
 int CursorReader::operator()(Datetime& value) {
-    int column = d_mapping[d_index].d_fieldId;
-    bool rc = d_cursor->getValue(column, &value);
+    bool rc = readFromCursor(&value);
     std::cout << "datetime: " << value << std::endl;
     return rc ? 0 : -1;
 }
 
 template<>
 int CursorReader::operator()(DatetimeTz& value) {
-    int column = d_mapping[d_index].d_fieldId;
-    bool rc = d_cursor->getValue(column, &value);
+    bool rc = readFromCursor(&value);
     std::cout << "datetimetz: " << value << std::endl;
     return rc ? 0 : -1;
 }
 
 template<>
 int CursorReader::operator()(std::string& value) {
-    int column = d_mapping[d_index].d_fieldId;
-    bool rc = d_cursor->getValue(column, &value);
+    bool rc = readFromCursor(&value);
     std::cout << "string:" << value << std::endl;
     return rc ? 0 : -1;
 }
 
-template<typename T>
-int CursorReader::operator()(T& value) {
-    typename category<T>::Value tag;
-    return handle(value, tag);
-}
 
-#endif // CURSORREADER_H
+#endif // CursorReader_H
