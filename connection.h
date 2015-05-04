@@ -1,12 +1,12 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
-#include <tr1/memory>
+#include <memory>
 #include "command.h"
 
 class Connection {
 public:
-    typedef std::tr1::shared_ptr<Connection> Ptr;
+    typedef std::shared_ptr<Connection> Ptr;
 
     virtual ~Connection();
 

@@ -2,13 +2,13 @@
 #define CURSOR_H
 
 #include <string>
-#include <tr1/memory>
+#include <memory>
 #include "indexedfieldset.h"
 
 class Cursor : public IndexedFieldSet {
 public:
 
-    typedef std::tr1::shared_ptr<Cursor> Ptr;
+    typedef std::shared_ptr<Cursor> Ptr;
 
     virtual ~Cursor();
 

@@ -75,7 +75,7 @@ int main()
     ConnectionPool::Ptr connectionPool;
     ConnectionPool::instance(&connectionPool);
     Connection::Ptr connection;
-    connectionPool->connect("clients.sqlite", &connection);
+    connectionPool->connect("/Users/okosenkov/build-STL-Desktop_Qt_5_2_0_clang_64bit-Debug/clients.sqlite", &connection);
 
     std::cout << "isOpen: " << connection->isOpen() << std::endl;
 

@@ -12,7 +12,7 @@
 
 class Command {
 public:
-    typedef std::tr1::shared_ptr<Command> Ptr;
+    typedef std::shared_ptr<Command> Ptr;
 
     virtual ~Command();
 

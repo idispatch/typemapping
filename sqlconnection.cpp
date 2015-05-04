@@ -42,7 +42,7 @@ bool SqlConnection::createCommand(const char *query,
     sqlite3_stmt *statement = NULL;
     int rc = ::sqlite3_prepare_v2(d_dbHandle,
                                   query,
-                                  strlen(query),
+                                  -1,
                                   &statement,
                                   NULL);
     if(rc == SQLITE_OK) {
