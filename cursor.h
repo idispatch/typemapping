@@ -2,11 +2,15 @@
 #define CURSOR_H
 
 #include <string>
+#include <tr1/memory>
 #include "indexedfieldset.h"
 
-class ReadOnlyCursor : public IndexedFieldSet {
+class Cursor : public IndexedFieldSet {
 public:
-    virtual ~ReadOnlyCursor();
+
+    typedef std::tr1::shared_ptr<Cursor> Ptr;
+
+    virtual ~Cursor();
 
     virtual bool close() = 0;
     virtual bool next() = 0;

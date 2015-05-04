@@ -2,6 +2,7 @@
 #define CUSTOMER_H
 
 #include <string>
+#include <vector>
 #include "typetraits.h"
 #include "nullable.h"
 #include "datetime.h"
@@ -11,11 +12,14 @@ class Customer {
     int             d_id;
     std::string     d_firstName;
     std::string     d_lastName;
+
     Nullable<int>   d_age;
     Datetime        d_dateJoined;
 
     Account         d_acc1;
     Account         d_acc2;
+
+    std::vector<std::string>     d_notes;
 public:
     enum {
         F_FIRST_NAME = 0,
@@ -24,7 +28,8 @@ public:
         F_DATE_JOINED = 31,
         F_ID = 1,
         F_ACCOUNT_PRIMARY = 2,
-        F_ACCOUNT_SECONDARY = 3
+        F_ACCOUNT_SECONDARY = 3,
+        F_NOTES = 70
     };
     Customer()
         : d_id(42),
@@ -52,6 +57,8 @@ public:
             return manipulator(d_age);
         case F_DATE_JOINED:
             return manipulator(d_dateJoined);
+        case F_NOTES:
+            return manipulator(d_notes);
         default:
             return -1;
         }

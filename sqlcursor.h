@@ -1,116 +1,63 @@
 #ifndef SQLCURSOR_H
 #define SQLCURSOR_H
 
+#include <sqlite3.h>
 #include "cursor.h"
 
-class SqlCursor : public ReadOnlyCursor {
-    bool d_closed;
+class SqlCursor : public Cursor {
+    friend class SqlCommand;
+
+    sqlite3_stmt *d_statement;
+    bool d_beforeFirst;
+    bool d_afterLast;
+
+    SqlCursor(sqlite3_stmt *statement);
 public:
-    SqlCursor()
-        :d_closed(false)
-    {}
+    bool close();
 
-    bool close() {
-        d_closed  = true;
-    }
+    bool next();
 
-    bool next() {
-        return true;
-    }
+    bool isClosed();
 
-    bool isClosed() {
-        return d_closed;
-    }
+    bool isBeforeFirst();
 
-    bool isBeforeFirst() {
-        return false;
-    }
+    bool isAfterLast();
 
-    bool isAfterLast() {
-        return false;
-    }
+    bool columnCount(int *result);
 
-    bool getType(int index, FieldType::Value * result) {
-        *result = FieldType::TYPE_NULL;
-        return true;
-    }
+    bool getType(int index, FieldType::Value * result);
 
-    virtual bool isNull(int index) {
-        return false;
-    }
+    virtual bool isNull(int index);
 
-    bool getValue(int index, bool * result) {
-        *result = false;
-        return true;
-    }
+    bool getValue(int index, bool * result);
 
-    bool getValue(int index,          char * result) {
-        *result = 4;
-        return true;
-    }
+    bool getValue(int index,          char * result);
 
-    bool getValue(int index, signed   char * result) {
-        *result = 4;
-        return true;
-    }
+    bool getValue(int index, signed   char * result);
 
-    bool getValue(int index, unsigned char * result) {
-        *result = 4;
-        return true;
-    }
+    bool getValue(int index, unsigned char * result);
 
-    bool getValue(int index, signed   short * result) {
-        *result = 4;
-        return true;
-    }
+    bool getValue(int index, signed   short * result);
 
-    bool getValue(int index, unsigned short * result) {
-        *result = 4;
-        return true;
-    }
+    bool getValue(int index, unsigned short * result);
 
-    bool getValue(int index, signed   int * result) {
-        *result = 4;
-        return true;
-    }
+    bool getValue(int index, signed   int * result);
 
-    bool getValue(int index, unsigned int * result) {
-        *result = 4;
-        return true;
-    }
+    bool getValue(int index, unsigned int * result);
 
-    bool getValue(int index, signed   long long * result) {
-        *result = 4;
-        return true;
-    }
+    bool getValue(int index, signed   long long * result);
 
-    bool getValue(int index, unsigned long long * result) {
-        *result = 4;
-        return true;
-    }
+    bool getValue(int index, unsigned long long * result);
 
-    bool getValue(int index, float * result) {
-        *result = 4.0;
-        return true;
-    }
+    bool getValue(int index, float * result);
 
-    bool getValue(int index, double * result) {
-        *result = 4.0;
-        return true;
-    }
+    bool getValue(int index, double * result);
 
-    bool getValue(int index, std::string * result) {
-        *result = "4.0";
-        return true;
-    }
+    bool getValue(int index, std::string * result);
 
-    bool getValue(int index, Datetime * result) {
-        return true;
-    }
+    bool getValue(int index, Datetime * result);
 
-    bool getValue(int index, DatetimeTz * result) {
-        return true;
-    }
+    bool getValue(int index, DatetimeTz * result);
 };
 
 #endif // SQLCURSOR_H

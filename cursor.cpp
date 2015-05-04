@@ -1,4 +1,4 @@
 #include "cursor.h"
 
-ReadOnlyCursor::~ReadOnlyCursor() {
+Cursor::~Cursor() {
 }

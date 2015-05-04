@@ -1,6 +1,8 @@
 #ifndef CursorReader_H
 #define CursorReader_H
 
+#include <string>
+#include <vector>
 #include "typetraits.h"
 #include "datetime.h"
 #include "mappingsequence.h"
@@ -9,10 +11,10 @@
 class CursorReader {
     const MappingSequence&  d_mapping;
     int                     d_index;
-    ReadOnlyCursor         *d_cursor;
+    Cursor                 *d_cursor;
 public:
     CursorReader(const MappingSequence &mapping,
-                 ReadOnlyCursor *cursor)
+                 Cursor *cursor)
         : d_mapping(mapping),
           d_index(0),
           d_cursor(cursor)
@@ -20,6 +22,9 @@ public:
 
     template<typename T>
     int operator()(T& value);
+
+    template<typename T>
+    int operator()(std::vector<T>& value);
 
     int operator()(bool value);
 
@@ -68,7 +73,19 @@ private:
 
 template<typename T>
 bool CursorReader::readFromCursor(T *value) {
-    return d_cursor->getValue(d_mapping[d_index].columnId(), value);
+    const int columnId = d_mapping[d_index].columnId();
+
+    FieldType::Value fieldType;
+    if(d_cursor->getType(columnId, &fieldType)) {
+        std::cout << "(cursor index:" << columnId
+                  << ", type:" << FieldType::toString(fieldType) <<")"
+                  << std::endl;
+    } else {
+        std::cout << "Could not get column type at column "
+                  << columnId << std::endl;
+    }
+
+    return d_cursor->getValue(columnId, value);
 }
 
 template<typename T>
@@ -106,11 +123,13 @@ int CursorReader::handle(T& value, category_enumeration) {
 
 template<typename T>
 int CursorReader::handle(T& value, category_sequence) {
-    int count = d_mapping[d_index++].d_fieldId;
+    int count = d_mapping[d_index++].numAttributes();
     int result = 0;
     for(int i = 0; result >= 0 && i < count; i++) {
-        const MappingItem& m = d_mapping[d_index++];
+        //const MappingItem& m = d_mapping[d_index++];
+        const MappingItem& m = d_mapping[d_index];
         result = value.manipulate(*this, m.fieldId());
+        d_index++;
     }
     return result;
 }
@@ -125,6 +144,17 @@ template<typename T>
 int CursorReader::handle(T& value, category_unknown) {
     std::cout << "UNKNOWN: " << value << std::endl;
     return -1;
+}
+
+template<typename T>
+int CursorReader::operator()(std::vector<T>& value) {
+    int index = d_mapping[d_index].index();
+    if(index <= value.size()) {
+        value.resize(index + 1);
+    }
+    bool rc = readFromCursor(&value[index]);
+    return rc ? 0 : -1;
+
 }
 
 template<typename T>

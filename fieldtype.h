@@ -37,6 +37,27 @@ public:
     static int toInt(FieldType::Value value) {
         return value;
     }
+
+    static const char *toString(FieldType::Value value) {
+        switch(value) {
+        case TYPE_NULL:
+            return "TYPE_NULL";
+        case TYPE_BOOL:
+            return "TYPE_BOOL";
+        case TYPE_DATETIME:
+            return "TYPE_DATETIME";
+        case TYPE_DATETIMETZ:
+            return "TYPE_DATETIMETZ";
+        case TYPE_FLOAT:
+            return "TYPE_FLOAT";
+        case TYPE_DOUBLE:
+            return "TYPE_DOUBLE";
+        case TYPE_STRING:
+            return "TYPE_STRING";
+        default:
+            return "?";
+        }
+    }
 };
 
 template<>
