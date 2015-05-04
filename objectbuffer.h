@@ -1,5 +1,5 @@
-#ifndef OBJECTBUFFER_H
-#define OBJECTBUFFER_H
+#ifndef INCLUDED_OBJECTBUFFER_H
+#define INCLUDED_OBJECTBUFFER_H
 
 template<typename T>
 class ObjectBuffer {
@@ -26,4 +26,4 @@ public:
     }
 };
 
-#endif // OBJECTBUFFER_H
+#endif

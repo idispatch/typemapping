@@ -111,10 +111,12 @@ bool SqlCommand::bind(int index, const std::vector<char>& value) {
 }
 
 bool SqlCommand::bind(int index, const Datetime& value) {
+    //TODO: bind Datetime
     return true;
 }
 
 bool SqlCommand::bind(int index, const DatetimeTz& value) {
+    //TODO: bind DatetimeTz
     return true;
 }
 
@@ -149,7 +151,8 @@ bool SqlCommand::execute(Cursor::Ptr *cursor)
 {
     if(d_statement == NULL) {
         return false;
+    } else {
+        cursor->reset(new SqlCursor(d_statement));
     }
-    cursor->reset(new SqlCursor(d_statement));
     return true;
 }

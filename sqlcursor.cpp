@@ -32,8 +32,29 @@ bool SqlCursor::isAfterLast() {
 }
 
 bool SqlCursor::getType(int index, FieldType::Value *result) {
-    *result = FieldType::TYPE_NULL;
-    return true;
+    bool rc = true;
+
+    const int columnType = ::sqlite3_column_type(d_statement, index);
+    switch(columnType) {
+    case SQLITE_INTEGER:
+        *result = FieldType::TYPE_SIGNED_LONG_LONG;
+        break;
+    case SQLITE_FLOAT:
+        *result = FieldType::TYPE_DOUBLE;
+        break;
+    case SQLITE_BLOB:
+        *result = FieldType::TYPE_BLOB;
+        break;
+    case SQLITE_TEXT:
+        *result = FieldType::TYPE_STRING;
+        break;
+    case SQLITE_NULL:
+        *result = FieldType::TYPE_NULL;
+        break;
+    default:
+        rc = false;
+    }
+    return rc;
 }
 
 bool SqlCursor::isNull(int index) {

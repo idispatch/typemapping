@@ -1,109 +1,182 @@
 #include <iostream>
-#include "typetraits.h"
-#include "objectbuffer.h"
 
 #include "account.h"
 #include "customer.h"
 
-#include "sqlcursor.h"
-
 #include "mappingitem.h"
 #include "mappingsequence.h"
-
-#include "cursorreader.h"
 
 #include "connection.h"
 #include "connectionfactory.h"
 #include "connectionpool.h"
+#include "connectionpoolguard.h"
+
+#include "objectreader.h"
 #include "command.h"
-
-// Case 1:
-//  using length as a prefix
-// Case 2:
-//  using terminator at the end (always the same)
-
-// vectors of primitives
-// vectors of complex types (of primitives)
-// nullables
 
 // Generated table
 const MappingItem sequence_1[] ={
-    MappingItem(8),
-    MappingItem(Customer::F_NOTES, 0, 17),
-    MappingItem(Customer::F_NOTES, 1, 18),
-    MappingItem(Customer::F_NOTES, 2, 19),
-    MappingItem(Customer::F_NOTES, 3, 20),
-    MappingItem(Customer::F_ID,          0),
-    MappingItem(Customer::F_FIRST_NAME,  1),
-    MappingItem(Customer::F_LAST_NAME,   2),
+    MappingItem(Customer::F_ID,             0),
+    MappingItem(Customer::F_FIRST_NAME,     1),
+    MappingItem(Customer::F_LAST_NAME,      2),
+    MappingItem(Customer::F_NOTES,       0, 3),
+    MappingItem(Customer::F_NOTES,       1, 4),
+    MappingItem(Customer::F_NOTES,       2, 5),
+    MappingItem(Customer::F_NOTES,       3, 6),
+    MappingItem()
+    /*
     MappingItem(Customer::F_AGE,         3),
     MappingItem(Customer::F_DATE_JOINED, 4),
+    MappingItem(Customer::F_ACCOUNT_PRIMARY),
 
-    /*
-    {Customer::F_ACCOUNT_PRIMARY,    -1},
+    MappingItem(Account::F_ACCOUNT_NAME,         5),
+    MappingItem(Account::F_ACCOUNT_ID,           6),
+    MappingItem(Account::F_ACCOUNT_TYPE,         7),
+    MappingItem(Account::F_ACCOUNT_AMOUNT,       8),
+    MappingItem(Account::F_ACCOUNT_DATE_OPENED,  9),
+    MappingItem(Account::F_ACCOUNT_ACTIVE,      10),
+    MappingItem(),
 
-    {6, -1},
-    {Account::F_ACCOUNT_NAME,         5},
-    {Account::F_ACCOUNT_ID,           6},
-    {Account::F_ACCOUNT_TYPE,         7},
-    {Account::F_ACCOUNT_AMOUNT,       8},
-    {Account::F_ACCOUNT_DATE_OPENED,  9},
-    {Account::F_ACCOUNT_ACTIVE,      10},
+    MappingItem(Customer::F_ACCOUNT_SECONDARY),
 
-    {Customer::F_ACCOUNT_SECONDARY,  -1},
-
-    {6, -1},
-    {Account::F_ACCOUNT_NAME,        11},
-    {Account::F_ACCOUNT_ID,          12},
-    {Account::F_ACCOUNT_TYPE,        13},
-    {Account::F_ACCOUNT_AMOUNT,      14},
-    {Account::F_ACCOUNT_DATE_OPENED, 15},
-    {Account::F_ACCOUNT_ACTIVE,      16}*/
+    MappingItem(Account::F_ACCOUNT_NAME,        11),
+    MappingItem(Account::F_ACCOUNT_ID,          12),
+    MappingItem(Account::F_ACCOUNT_TYPE,        13),
+    MappingItem(Account::F_ACCOUNT_AMOUNT,      14),
+    MappingItem(Account::F_ACCOUNT_DATE_OPENED, 15),
+    MappingItem(Account::F_ACCOUNT_ACTIVE,      16),
+    MappingItem()*/
 };
 
-int main()
+
+void testDatabase()
 {
-    MappingSequence mapping(sequence_1,
-                            sizeof(sequence_1)/sizeof(sequence_1[0]));
+    // Obtain defaul connection pool instance
+    ConnectionPool::Ptr connectionPool = ConnectionPool::instance();
 
-    Customer customer;
+    // Optionally setup connection pool guard (will clean pool one exit)
+    ConnectionPoolGuard poolGuard(connectionPool);
 
-    /*CursorReader reader(mapping, &cursor);
-    reader(customer);
-*/
-
-    ConnectionPool::Ptr connectionPool;
-    ConnectionPool::instance(&connectionPool);
+    // Get database connection from the connection pool
     Connection::Ptr connection;
-    connectionPool->connect("/Users/okosenkov/build-STL-Desktop_Qt_5_2_0_clang_64bit-Debug/clients.sqlite", &connection);
+    connectionPool->connect("clients.sqlite", &connection);
 
-    std::cout << "isOpen: " << connection->isOpen() << std::endl;
+    // Print connection state
+    std::cout << "Database connection opened: "
+              << connection->isOpen()
+              << std::endl;
 
+    if(!connection->isOpen()) {
+        return;
+    }
+
+    std::cout << "Database connection string: "
+              << connection->connectionString()
+              << std::endl;
+
+
+    // Create the SQL command
     Command::Ptr command;
-    connection->createCommand("SELECT clientId, firstName, lastName FROM clients",
+    connection->createCommand("SELECT "
+                              "clientId, firstName, lastName, "
+                              "note1, note2, note3, note4 "
+                              "FROM clients",
                               &command);
 
+    // Execute the command and get SQL cursor
     Cursor::Ptr cursor;
     command->execute(&cursor);
 
+    // Iterate the cursor
     while(cursor->next()) {
         int clientId;
         std::string firstName;
         std::string lastName;
 
+        std::string note1;
+        std::string note2;
+        std::string note3;
+        std::string note4;
+
         cursor->getValue(0, &clientId);
         cursor->getValue(1, &firstName);
         cursor->getValue(2, &lastName);
+        cursor->getValue(3, &note1);
+        cursor->getValue(4, &note2);
+        cursor->getValue(5, &note3);
+        cursor->getValue(6, &note4);
 
         std::cout << "id: " << clientId
                   << ", firstName: " << firstName
                   << ", lastName: " << lastName
+                  << ", note1: " << note1
+                  << ", note2: " << note2
+                  << ", note3: " << note3
+                  << ", note4: " << note4
                   << std::endl;
     }
 
+    // Optionally close the connection (the connection may still be pooled)
     connection->close();
+}
 
-    ConnectionPool::clearAllPools();
+void testMapping() {
+    // Obtain defaul connection pool instance
+    ConnectionPool::Ptr connectionPool = ConnectionPool::instance();
+
+    // Get database connection from the connection pool
+    Connection::Ptr connection;
+    connectionPool->connect("clients.sqlite", &connection);
+
+    // Print connection state
+    std::cout << "Database connection opened: "
+              << connection->isOpen()
+              << std::endl;
+
+    if(!connection->isOpen()) {
+        return;
+    }
+
+    std::cout << "Database connection string: "
+              << connection->connectionString()
+              << std::endl;
+
+
+    // Create the SQL command
+    Command::Ptr command;
+    connection->createCommand("SELECT "
+                              "clientId, firstName, lastName, "
+                              "note1, note2, note3, note4 "
+                              "FROM clients",
+                              &command);
+
+    // Execute the command and get SQL cursor
+    Cursor::Ptr cursor;
+    command->execute(&cursor);
+
+    MappingSequence mapping(sequence_1);
+
+    ObjectReader reader(mapping, cursor);
+    std::cout << "Preparing to read customers..." << std::endl;
+    while(cursor->next()) {
+        Customer value;
+        if(reader(&value) != 0) {
+            std::cout << "Failed to read." << std::endl;
+            break;
+        } else {
+            std::cout << "Read customer:" << std::endl;
+            std::cout << value << std::endl;
+        }
+        reader.reset();
+    }
+
+    std::cout << "Done reading customers" << std::endl;
+}
+
+int main()
+{
+    testDatabase();
+    testMapping();
     return 0;
 }
 

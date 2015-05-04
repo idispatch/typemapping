@@ -1,5 +1,5 @@
-#ifndef NULLABLE_H
-#define NULLABLE_H
+#ifndef INCLUDED_NULLABLE_H
+#define INCLUDED_NULLABLE_H
 
 #include <ostream>
 #include"typetraits.h"
@@ -60,4 +60,4 @@ std::ostream& operator <<  (std::ostream& stream, const Nullable<T>& value) {
     }
     return stream;
 }
-#endif // NULLABLE_H
+#endif

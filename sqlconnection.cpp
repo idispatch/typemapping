@@ -16,9 +16,14 @@ SqlConnection::~SqlConnection() {
     closeConnection();
 }
 
-bool SqlConnection::open(const char *connectionString) {
+const std::string& SqlConnection::connectionString() const {
+    return d_connectionString;
+}
+
+bool SqlConnection::open(const std::string& connectionString) {
     closeConnection();
-    int rc = ::sqlite3_open(connectionString, &d_dbHandle);
+    d_connectionString = connectionString;
+    int rc = ::sqlite3_open(d_connectionString.c_str(), &d_dbHandle);
     return rc == SQLITE_OK;
 }
 

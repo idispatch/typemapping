@@ -36,17 +36,17 @@ public:
     int manipulate(MANIPULATOR& manipulator, int id) {
         switch(id) {
         case F_ACCOUNT_NAME:
-            return manipulator(d_name);
+            return manipulator(&d_name);
         case F_ACCOUNT_ID:
-            return manipulator(d_id);
+            return manipulator(&d_id);
         case F_ACCOUNT_TYPE:
-            return manipulator(d_accountType);
+            return manipulator(&d_accountType);
         case F_ACCOUNT_ACTIVE:
-            return manipulator(d_active);
+            return manipulator(&d_active);
         case F_ACCOUNT_AMOUNT:
-            return manipulator(d_amount);
+            return manipulator(&d_amount);
         case F_ACCOUNT_DATE_OPENED:
-            return manipulator(d_dateOpened);
+            return manipulator(&d_dateOpened);
         default:
             return -1;
         }

@@ -1,5 +1,5 @@
-#ifndef TYPETRAITS_H
-#define TYPETRAITS_H
+#ifndef INCLUDED_TYPETRAITS_H
+#define INCLUDED_TYPETRAITS_H
 
 #include <string>
 
@@ -70,20 +70,20 @@ struct if_<true, TRUE, FALSE> {
     typedef TRUE Value;
 };
 
-struct category_sequence {};
-struct category_choice {};
-struct category_enumeration {};
-struct category_primitive {};
-struct category_nullable {};
-struct category_unknown {};
+struct Category_Sequence {};
+struct Category_Choice {};
+struct Category_Enumeration {};
+struct Category_Primitive {};
+struct Category_Nullable {};
+struct Category_Unknown {};
 
 template<typename T>
 struct category {
-    typedef typename if_<IsSequence<T>::Value,         category_sequence,
-                typename if_<IsChoice<T>::Value,       category_choice,
-                    typename if_<IsNullable<T>::Value, category_nullable,
-                        typename if_<IsEnum<T>::Value, category_enumeration,
-                                                       category_primitive>::Value>::Value>::Value>::Value Value;
+    typedef typename if_<IsSequence<T>::Value,         Category_Sequence,
+                typename if_<IsChoice<T>::Value,       Category_Choice,
+                    typename if_<IsNullable<T>::Value, Category_Nullable,
+                        typename if_<IsEnum<T>::Value, Category_Enumeration,
+                                                       Category_Primitive>::Value>::Value>::Value>::Value Value;
 };
 
-#endif // TYPETRAITS_H
+#endif

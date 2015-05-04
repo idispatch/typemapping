@@ -36,29 +36,45 @@ public:
           d_firstName("John"),
           d_lastName("Doe"),
           d_age(50),
-          d_acc1(5,"chequing",AccountType::CHECKING),
+          d_acc1(5,"chequing",AccountType::CHEQUING),
           d_acc2(6,"savings",AccountType::SAVINGS)
     {}
+
+    int id() const {
+        return d_id;
+    }
+
+    const std::string& firstName() const {
+        return d_firstName;
+    }
+
+    const std::string& lastName() const {
+        return d_lastName;
+    }
+
+    const std::vector<std::string>& notes() const {
+        return d_notes;
+    }
 
     template<typename MANIPULATOR>
     int manipulate(MANIPULATOR& manipulator, int id) {
         switch(id) {
         case F_FIRST_NAME:
-            return manipulator(d_firstName);
+            return manipulator(&d_firstName);
         case F_LAST_NAME:
-            return manipulator(d_lastName);
+            return manipulator(&d_lastName);
         case F_ID:
-            return manipulator(d_id);
+            return manipulator(&d_id);
         case F_ACCOUNT_PRIMARY:
-            return manipulator(d_acc1);
+            return manipulator(&d_acc1);
         case F_ACCOUNT_SECONDARY:
-            return manipulator(d_acc2);
+            return manipulator(&d_acc2);
         case F_AGE:
-            return manipulator(d_age);
+            return manipulator(&d_age);
         case F_DATE_JOINED:
-            return manipulator(d_dateJoined);
+            return manipulator(&d_dateJoined);
         case F_NOTES:
-            return manipulator(d_notes);
+            return manipulator(&d_notes);
         default:
             return -1;
         }
@@ -67,5 +83,19 @@ public:
 
 template<>
 struct IsSequence<Customer> : TrueType {};
+
+
+inline
+std::ostream& operator <<  (std::ostream& stream, const Customer& value) {
+    stream << "[" << " id: " << value.id()
+                  << " firstName: " << value.firstName()
+                  << " lastName: " << value.lastName();
+    for(int i = 0; i < value.notes().size(); ++i) {
+        stream << " note" << i+1 << ": " << value.notes()[i];
+    }
+    stream << "]";
+    return stream;
+}
+
 
 #endif // CUSTOMER_H

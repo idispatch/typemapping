@@ -1,5 +1,5 @@
-#ifndef DATETIMETZ_H
-#define DATETIMETZ_H
+#ifndef INCLUDED_DATETIMETZ_H
+#define INCLUDED_DATETIMETZ_H
 
 #include <ostream>
 #include "typetraits.h"
@@ -33,10 +33,13 @@ public:
 
 inline
 std::ostream& operator <<  (std::ostream& stream, DatetimeTz value) {
-    return stream << "["<< value.year() << "." << value.month() << "." << value.day() << "@" << value.timezone() << "]";
+    return stream << "["<< value.year() << "-"
+                        << value.month() << "-"
+                        << value.day() << "@"
+                        << value.timezone() << "]";
 }
 
 template<>
 struct IsPrimitive<DatetimeTz> : TrueType {};
 
-#endif // DATETIMETZ_H
+#endif

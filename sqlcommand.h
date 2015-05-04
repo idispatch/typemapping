@@ -1,10 +1,14 @@
-#ifndef SQLCOMMAND_H
-#define SQLCOMMAND_H
+#ifndef INCLUDED_SQLCOMMAND_H
+#define INCLUDED_SQLCOMMAND_H
 
 #include "command.h"
 #include <sqlite3.h>
 
 //TODO: Transient binding
+//TODO: Supports indexed binding
+//TODO: Supports named binding
+//TODO: Error source (code/info)
+//TODO: Supports properties
 
 class SqlCommand : public Command {
     friend class SqlConnection;
@@ -54,4 +58,4 @@ public:
     bool execute(Cursor::Ptr *cursor);
 };
 
-#endif // SQLCOMMAND_H
+#endif

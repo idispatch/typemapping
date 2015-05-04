@@ -1,5 +1,5 @@
-#ifndef DATETIME_H
-#define DATETIME_H
+#ifndef INCLUDED_DATETIME_H
+#define INCLUDED_DATETIME_H
 
 #include <ostream>
 #include "typetraits.h"
@@ -31,10 +31,12 @@ public:
 
 inline
 std::ostream& operator <<  (std::ostream& stream, Datetime value) {
-    return stream << "["<< value.year() << "." << value.month() << "." << value.day() << "]";
+    return stream << "[" << value.year() << "-"
+                         << value.month() << "-"
+                         << value.day() << "]";
 }
 
 template<>
 struct IsPrimitive<Datetime> : TrueType {};
 
-#endif // DATETIME_H
+#endif

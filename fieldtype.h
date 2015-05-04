@@ -1,5 +1,5 @@
-#ifndef FIELDTYPE_H
-#define FIELDTYPE_H
+#ifndef INCLUDED_FIELDTYPE_H
+#define INCLUDED_FIELDTYPE_H
 
 #include "typetraits.h"
 
@@ -9,7 +9,6 @@ public:
         TYPE_NULL = 0,
         TYPE_BOOL,
 
-        TYPE_CHAR,
         TYPE_SIGNED_CHAR,
         TYPE_UNSIGNED_CHAR,
 
@@ -18,9 +17,6 @@ public:
 
         TYPE_SIGNED_INTEGER,
         TYPE_UNSIGNED_INTEGER,
-
-        TYPE_SIGNED_LONG,
-        TYPE_UNSIGNED_LONG,
 
         TYPE_SIGNED_LONG_LONG,
         TYPE_UNSIGNED_LONG_LONG,
@@ -31,7 +27,8 @@ public:
         TYPE_FLOAT,
         TYPE_DOUBLE,
 
-        TYPE_STRING
+        TYPE_STRING,
+        TYPE_BLOB
     };
 
     static int toInt(FieldType::Value value) {
@@ -44,6 +41,22 @@ public:
             return "TYPE_NULL";
         case TYPE_BOOL:
             return "TYPE_BOOL";
+        case TYPE_SIGNED_CHAR:
+            return "TYPE_SIGNED_CHAR";
+        case TYPE_UNSIGNED_CHAR:
+            return "TYPE_UNSIGNED_CHAR";
+        case TYPE_SIGNED_SHORT:
+            return "TYPE_SIGNED_SHORT";
+        case TYPE_UNSIGNED_SHORT:
+            return "TYPE_UNSIGNED_SHORT";
+        case TYPE_SIGNED_INTEGER:
+            return "TYPE_SIGNED_INTEGER";
+        case TYPE_UNSIGNED_INTEGER:
+            return "TYPE_UNSIGNED_INTEGER";
+        case TYPE_SIGNED_LONG_LONG:
+            return "TYPE_SIGNED_LONG_LONG";
+        case TYPE_UNSIGNED_LONG_LONG:
+            return "TYPE_UNSIGNED_LONG_LONG";
         case TYPE_DATETIME:
             return "TYPE_DATETIME";
         case TYPE_DATETIMETZ:
@@ -54,6 +67,8 @@ public:
             return "TYPE_DOUBLE";
         case TYPE_STRING:
             return "TYPE_STRING";
+        case TYPE_BLOB:
+            return "TYPE_BLOB";
         default:
             return "?";
         }
@@ -65,4 +80,4 @@ struct IsEnum<FieldType::Value> : TrueType {
     typedef FieldType Wrapper;
 };
 
-#endif // FIELDTYPE_H
+#endif

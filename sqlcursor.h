@@ -1,8 +1,11 @@
-#ifndef SQLCURSOR_H
-#define SQLCURSOR_H
+#ifndef INCLUDED_SQLCURSOR_H
+#define INCLUDED_SQLCURSOR_H
 
 #include <sqlite3.h>
 #include "cursor.h"
+
+//TODO: Error source (code/info)
+//TODO: Supports properties
 
 class SqlCursor : public Cursor {
     friend class SqlCommand;
@@ -60,4 +63,4 @@ public:
     bool getValue(int index, DatetimeTz * result);
 };
 
-#endif // SQLCURSOR_H
+#endif

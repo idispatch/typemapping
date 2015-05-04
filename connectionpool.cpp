@@ -3,11 +3,12 @@
 
 ConnectionPool::Ptr ConnectionPool::s_instance;
 
-bool ConnectionPool::instance(ConnectionPool::Ptr * pool) {
+ConnectionPool::Ptr ConnectionPool::instance() {
+    // TODO: initialize once
     if(!s_instance) {
         s_instance.reset(new ConnectionPool());
     }
-    *pool = s_instance;
+    return s_instance;
 }
 
 bool ConnectionPool::connect(const char *connectionString,
@@ -20,6 +21,10 @@ bool ConnectionPool::connect(const char *connectionString,
     }
     *connection = d_connection;
     return (*connection) != NULL;
+}
+
+void ConnectionPool::clearPool() {
+    d_connection.reset();
 }
 
 void ConnectionPool::clearAllPools() {
