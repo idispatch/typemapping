@@ -7,6 +7,12 @@
 #include "datetime.h"
 #include "datetimetz.h"
 
+//TODO: last error support
+
+                            // ============
+                            // class Cursor
+                            // ============
+
 class Cursor {
 public:
     // PUBLIC TYPES
@@ -71,7 +77,6 @@ public:
     virtual bool next() = 0;
         // Advance the cursor position to the next row.  Return 'true' on
         // success and 'false' otherwise.
-
 };
 
 #endif // CURSOR_H

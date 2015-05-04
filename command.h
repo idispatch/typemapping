@@ -1,5 +1,5 @@
-#ifndef COMMAND_H
-#define COMMAND_H
+#ifndef INCLUDED_COMMAND_H
+#define INCLUDED_COMMAND_H
 
 #include <string>
 #include <vector>
@@ -9,6 +9,12 @@
 
 //TODO: Command Flags
 //TODO: Transient binding
+//TODO: last error support
+
+
+                            // =============
+                            // class Command
+                            // =============
 
 class Command {
 public:

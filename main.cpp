@@ -16,14 +16,22 @@
 
 // Generated table
 const MappingItem sequence_1[] ={
-    MappingItem(Customer::F_ID,             0),
+    { Customer::F_ID,          0, 0 },
+    { Customer::F_FIRST_NAME,  1, 0 },
+    { Customer::F_LAST_NAME,   2, 0 },
+    { Customer::F_NOTES,       3, 0 },
+    { Customer::F_NOTES,       4, 1 },
+    { Customer::F_NOTES,       5, 2 },
+    { Customer::F_NOTES,       6, 3 },
+    { -1, -1, -1 }
+    /*MappingItem(Customer::F_ID,             0),
     MappingItem(Customer::F_FIRST_NAME,     1),
     MappingItem(Customer::F_LAST_NAME,      2),
     MappingItem(Customer::F_NOTES,       0, 3),
     MappingItem(Customer::F_NOTES,       1, 4),
     MappingItem(Customer::F_NOTES,       2, 5),
     MappingItem(Customer::F_NOTES,       3, 6),
-    MappingItem()
+    MappingItem()*/
     /*
     MappingItem(Customer::F_AGE,         3),
     MappingItem(Customer::F_DATE_JOINED, 4),

@@ -153,7 +153,7 @@ int ObjectReader::handle(T *value, Category_Unknown) {
 
 template<typename T>
 int ObjectReader::operator()(std::vector<T> *value) {
-    int index = d_mapping[d_index].index();
+    std::size_t index = d_mapping[d_index].index();
     if(index <= value->size()) {
         value->resize(index + 1);
     }

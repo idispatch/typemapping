@@ -90,8 +90,10 @@ std::ostream& operator <<  (std::ostream& stream, const Customer& value) {
     stream << "[" << " id: " << value.id()
                   << " firstName: " << value.firstName()
                   << " lastName: " << value.lastName();
-    for(int i = 0; i < value.notes().size(); ++i) {
-        stream << " note" << i+1 << ": " << value.notes()[i];
+    const std::vector<std::string>& notes = value.notes();
+    const std::size_t numNotes = notes.size();
+    for(std::size_t i = 0; i < numNotes; ++i) {
+        stream << " note" << i+1 << ": " << notes[i];
     }
     stream << "]";
     return stream;

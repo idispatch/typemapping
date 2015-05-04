@@ -110,12 +110,12 @@ bool SqlCommand::bind(int index, const std::vector<char>& value) {
     return rc == SQLITE_OK;
 }
 
-bool SqlCommand::bind(int index, const Datetime& value) {
+bool SqlCommand::bind(int, const Datetime&) {
     //TODO: bind Datetime
     return true;
 }
 
-bool SqlCommand::bind(int index, const DatetimeTz& value) {
+bool SqlCommand::bind(int, const DatetimeTz&) {
     //TODO: bind DatetimeTz
     return true;
 }

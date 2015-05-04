@@ -5,6 +5,8 @@
 #include <string>
 #include "command.h"
 
+//TODO: last error support
+
                             // ================
                             // class Connection
                             // ================

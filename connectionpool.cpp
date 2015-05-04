@@ -20,7 +20,7 @@ bool ConnectionPool::connect(const char *connectionString,
         }
     }
     *connection = d_connection;
-    return (*connection) != NULL;
+    return (*connection);
 }
 
 void ConnectionPool::clearPool() {

@@ -10,6 +10,7 @@ bool SqlCursor::close() {
     d_statement = NULL;
     d_beforeFirst = false;
     d_afterLast = false;
+    return true;
 }
 
 bool SqlCursor::next() {
@@ -140,11 +141,11 @@ bool SqlCursor::getValue(int index, std::string *result) {
     return true;
 }
 
-bool SqlCursor::getValue(int index, Datetime * result) {
+bool SqlCursor::getValue(int, Datetime *) {
     return true;
 }
 
-bool SqlCursor::getValue(int index, DatetimeTz * result) {
+bool SqlCursor::getValue(int, DatetimeTz *) {
     return true;
 }
 
